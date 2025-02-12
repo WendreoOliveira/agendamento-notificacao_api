@@ -3,8 +3,10 @@ package com.projeto.agendamento_notificacao_api.business;
 import com.projeto.agendamento_notificacao_api.business.mapper.IAgendamentoMapper;
 import com.projeto.agendamento_notificacao_api.controller.dto.in.AgendamentoRecord;
 import com.projeto.agendamento_notificacao_api.controller.dto.out.AgendamentoRecordOut;
+import com.projeto.agendamento_notificacao_api.infrastructure.exception.NotFoundException;
 import com.projeto.agendamento_notificacao_api.infrastructure.repositories.AgendamentoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -20,4 +22,8 @@ public class AgendamentoService {
                         agendamentoMapper.paraEntity(agendamento)));
     }
 
+    public AgendamentoRecordOut buscarAgendamentoPorId(Long id) {
+        return agendamentoMapper.paraOut(repository.findById(id)
+                .orElseThrow(() ->  new NotFoundException("Id não encontrado")));
+    }
 }
